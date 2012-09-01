@@ -54,10 +54,15 @@
 				parent_id: parent.find('.js-entry-form-parent-id').val(),
 			}, -> window.location.reload()).error -> alert 'fail'
 
-		$('.js-create-entry').click ->
+		$('.js-create-entry-bottom').click ->
 			$('
 				<li>' + render_entry_form('new', "", 0) + '</li>
 			').appendTo($ 'body .js-entries:first').find('textarea').focus()
+
+		$('.js-create-entry-top').click ->
+			$('
+				<li>' + render_entry_form('new', "", 0) + '</li>
+			').prependTo($ 'body .js-entries:first').find('textarea').focus()
 
 		$('.js-add-child').click ->
 			parent = $(this).closest('li')
@@ -167,6 +172,11 @@
 	</li>
 </%def>
 
+
+<div>
+	<a href="#" class="js-create-entry-top js"><i class="icon-plus"></i></a>
+</div>
+
 <div id="js-root-parent" style="height: 0.5em;"></div>
 <ul class="unstyled js-entries">
 	% for entry in entries:
@@ -175,5 +185,5 @@
 </ul>
 
 <div>
-	<a href="#" class="js-create-entry js"><i class="icon-plus"></i></a>
+	<a href="#" class="js-create-entry-bottom js"><i class="icon-plus"></i></a>
 </div>
