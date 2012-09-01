@@ -84,7 +84,8 @@
 		    opacity: 0.8,
 		    addClasses: false,
 		    helper: 'clone',
-		    zIndex: 100
+		    zIndex: 100,
+		    delay: 300,
 		})
 
 		$('.js-entries li').droppable({
