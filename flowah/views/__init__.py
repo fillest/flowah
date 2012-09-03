@@ -29,12 +29,14 @@ def list_ (request):
 		entries[e.id] = e
 
 	keys_to_del = []
-	for id, e in entries.items():
+	items = entries.items()
+	for id, e in items:
 		if e.parent_id:
 			keys_to_del.append(id)
 			if e.parent_id not in entries: #for filter
 				entries[e.parent_id] = e.parent
 				e.parent.children = []
+				items.append((e.parent_id, e.parent)) #visit parents too later so hierarchy doesnt breake
 			entries[e.parent_id].children.append(e)
 	for id in keys_to_del:
 		del entries[id]
