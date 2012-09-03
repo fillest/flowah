@@ -3,12 +3,18 @@
 
 <script type="text/coffeescript">
 	$ ->
-		$('.js').click ->
-			false
+		$('body').on 'click', '.js', (event) ->
+			event.preventDefault()
 
-		$('.js-confirm').click ->
-			confirm "are you sure?"
+		$('.js-confirm').click (event) ->
+			if not confirm "are you sure?"
+				event.stopImmediatePropagation()
+				return false
 
+		$('.js-delete-entry').click ->  #note: must be executed later than $('.js-confirm').click ..
+			$.post("${request.route_path('entry.delete')}", {
+				entry_id: $(this).closest('li').data('entry-id'),
+			}, -> window.location.reload()).error -> alert 'fail'
 
 		render_entry_form = (entry_id, content, priority, parent_id = '') ->
 			'
@@ -141,7 +147,7 @@
 <%def name="render_entry (entry, level = 1)">
     <li data-entry-id="${entry.id}">
 		<div class="buttons">
-			<a href="${request.route_path('entry.delete', id = entry.id)}" class="js-confirm"><i class="icon-remove"></i></a>
+			<a href="#" class="js-confirm js-delete-entry js"><i class="icon-remove"></i></a>
 			<a href="#" class="js-edit-entry js"
 				data-entry-id="${entry.id}"
 				data-entry-priority="${entry.priority}"><i class="icon-pencil"></i></a>

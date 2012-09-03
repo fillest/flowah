@@ -65,11 +65,11 @@ def save (request):
 		).add()
 	return 'ok'
 
-@add_route('entry.delete', '/delete/{id:\d+}')
-@view_config(route_name = 'entry.delete', permission = 'admin')
+@add_route('entry.delete', '/delete')
+@view_config(route_name = 'entry.delete', permission = 'admin', renderer = 'string')
 def delete (request):
-	Entry.query.filter_by(id = request.matchdict['id']).delete()
-	return HTTPFound(location = request.referer)
+	Entry.query.filter_by(id = request.POST['entry_id']).delete()
+	return 'ok'
 
 @add_route('entry.move', '/move')
 @view_config(route_name = 'entry.move', renderer = 'string', permission = 'admin')
