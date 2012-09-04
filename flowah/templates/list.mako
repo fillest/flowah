@@ -16,6 +16,11 @@
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> window.location.reload()).error -> alert 'fail'
 
+		$('.js-cross-entry').click ->
+			$.post("${request.route_path('entry.cross')}", {
+				entry_id: $(this).closest('li').data('entry-id'),
+			}, -> window.location.reload()).error -> alert 'fail'
+
 		render_entry_form = (entry_id, content, priority, parent_id = '') ->
 			'
 			<textarea rows="1" style="width: 300px;">' + content + '</textarea>
@@ -147,6 +152,7 @@
 <%def name="render_entry (entry, level = 1)">
     <li data-entry-id="${entry.id}">
 		<div class="buttons">
+			<a href="#" class="js js-cross-entry"><i class="icon-check"></i></a>
 			<a href="#" class="js-confirm js-delete-entry js"><i class="icon-remove"></i></a>
 			<a href="#" class="js-edit-entry js"
 				data-entry-id="${entry.id}"
@@ -160,7 +166,8 @@
 				•
 				<span style="background: ${priorities[entry.priority]['color']}; ${'visibility: hidden;' if not entry.priority else ''}">
 					<i class="icon-exclamation-sign icon-white"></i></span>
-				<span class="js-expand-content" style="cursor: crosshair;">${entry.render()}</span>
+				<span class="js-expand-content"
+					style="cursor: crosshair; ${'text-decoration: line-through;' if entry.is_crossed else ''}">${entry.render()}</span>
 				<span class="js-content-rendered-full" style="display: none; cursor: n-resize">${entry.render(full = True)}</span>
 			</div>
 		</div>

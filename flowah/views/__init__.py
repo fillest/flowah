@@ -77,3 +77,9 @@ def move (request):
 	assert request.GET['id'] != request.GET['parent_id']
 	Entry.query.filter_by(id = request.GET['id']).update({"parent_id": request.GET['parent_id'] or None}, synchronize_session=False)
 	return 'ok'
+
+@add_route('entry.cross', '/cross')
+@view_config(route_name = 'entry.cross', renderer = 'string', permission = 'admin')
+def cross (request):
+	Entry.query.filter_by(id = request.POST['entry_id']).update({"is_crossed": ~ Entry.is_crossed}, synchronize_session=False)
+	return 'ok'
