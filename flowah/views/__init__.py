@@ -83,3 +83,9 @@ def move (request):
 def cross (request):
 	Entry.query.filter_by(id = request.POST['entry_id']).update({"is_crossed": ~ Entry.is_crossed}, synchronize_session=False)
 	return 'ok'
+
+@add_route('entry.fold', '/fold')
+@view_config(route_name = 'entry.fold', renderer = 'string', permission = 'admin')
+def fold (request):
+	Entry.query.filter_by(id = request.POST['entry_id']).update({"is_folded": ~ Entry.is_folded}, synchronize_session=False)
+	return 'ok'

@@ -21,6 +21,11 @@
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> window.location.reload()).error -> alert 'fail'
 
+		$('.js-fold-entry').click ->
+			$.post("${request.route_path('entry.fold')}", {
+				entry_id: $(this).closest('li').data('entry-id'),
+			}, -> window.location.reload()).error -> alert 'fail'
+			
 		render_entry_form = (entry_id, content, priority, parent_id = '') ->
 			'
 			<textarea rows="1" style="width: 300px;">' + content + '</textarea>
@@ -158,6 +163,7 @@
 				data-entry-id="${entry.id}"
 				data-entry-priority="${entry.priority}"><i class="icon-pencil"></i></a>
 			<a href="#" class="js-add-child js"><i class="icon-plus"></i></a>
+			<a href="#" class="js-fold-entry js" ${'style="visibility: visible"' if entry.is_folded else '' |n}><i class="icon-folder-open"></i></a>
 		</div>
 		<div style="float: left; margin-left: 0.3em;">
 			<span class="js-content-source" style="display: none;">${entry.content}</span>
@@ -174,14 +180,16 @@
 		<div class="js-entry-boundary" style="clear: both;"></div>
 
 		% if entry.children:
-			<ul class="unstyled js-entries">
-				% for ch in entry.children:
-					% for l in range(level):
-						<div style="display: block; width: 2em; float: left;">&nbsp;</div>
-					%endfor
-					${render_entry(ch, level + 1)}
-				% endfor
-			</ul>
+			% if not entry.is_folded:
+				<ul class="unstyled js-entries">
+					% for ch in entry.children:
+						% for l in range(level):
+							<div style="display: block; width: 2em; float: left;">&nbsp;</div>
+						%endfor
+						${render_entry(ch, level + 1)}
+					% endfor
+				</ul>
+			% endif
 		% endif
 	</li>
 </%def>
