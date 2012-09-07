@@ -12,16 +12,19 @@
 				return false
 
 		$('.js-delete-entry').click ->  #note: must be executed later than $('.js-confirm').click ..
+			$('#spinner').show()
 			$.post("${request.route_path('entry.delete')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> window.location.reload()).error -> alert 'fail'
 
 		$('.js-cross-entry').click ->
+			$('#spinner').show()
 			$.post("${request.route_path('entry.cross')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> window.location.reload()).error -> alert 'fail'
 
 		$('.js-fold-entry').click ->
+			$('#spinner').show()
 			$.post("${request.route_path('entry.fold')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> window.location.reload()).error -> alert 'fail'
@@ -60,6 +63,8 @@
 			').appendTo(parent).focus()
 
 		$('body').on 'click', '.js-save-entry', ->
+			$('#spinner').show()
+
 			el = $(this)
 			parent = el.parent()
 
@@ -139,7 +144,10 @@
 	.js-entries > li > .buttons {visibility: hidden; float: left;}
 	.js-entries > li:hover > .buttons {visibility: visible;}
 	.content-rendered {text-overflow: '(…)'; width: 800px; white-space: nowrap; overflow: hidden;}
+	#spinner {position: fixed; top: 0; left: 0; z-index: 9000;}
 </style>
+
+<img id="spinner" class="hide" src="http://cdn.fillest.ru/spinner.gif" alt="loading..." title="loading..." />
 
 <form action="${request.route_path('root')}" method="get">
 	% for value, params in sorted(priorities.items(), reverse = True):
