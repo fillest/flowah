@@ -115,6 +115,7 @@
 		    addClasses: false,
 		    tolerance: 'pointer',
 		    drop: (e, ui) ->
+		    	$('#spinner').show()
 		    	$.get('${request.route_path('entry.move')}?id=' + ui.draggable.data('entry-id') + '&parent_id=' + $(this).data('entry-id'), ->
 		    		window.location.reload()
 		    	).error -> alert 'fail'
@@ -129,6 +130,7 @@
 		    addClasses: false,
 		    tolerance: 'pointer',
 		    drop: (e, ui) ->
+		    	$('#spinner').show()
 		    	$.get('${request.route_path('entry.move')}?id=' + ui.draggable.data('entry-id') + '&parent_id=', ->
 		    		window.location.reload()
 		    	).error -> alert 'fail'
