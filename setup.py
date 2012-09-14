@@ -46,6 +46,6 @@ setup(name='flowah',
       [paste.app_factory]
         main = flowah:main
       [console_scripts]
-        migrate = flowah.scripts.migrate:main
+        migrate = sapyens.migrate:run
       """,
       )

@@ -30,7 +30,6 @@ def build ():
         local('python setup.py sdist')
 
 def deploy ():
-    # clean()
     try:
         build()
         sdist_remote_path = upload_dist()
@@ -41,7 +40,7 @@ def deploy ():
         with prefix('source /opt/flowah/venv/bin/activate'):
             sudo('(pip freeze | grep flowah) && pip uninstall --yes flowah || :', user = 'flowah')
             sudo('pip install ' + sdist_remote_path, user = 'flowah')
-            sudo('pip install git+https://github.com/fillest/sapyens.git', user = 'flowah')
+            sudo('pip install --upgrade git+https://github.com/fillest/sapyens.git', user = 'flowah')
 
             with cd('/opt/flowah'):
                 sudo('migrate production.ini', user = 'flowah')
@@ -49,7 +48,6 @@ def deploy ():
 
         start()
     finally:
-        # pass
         clean()
 
 def upload_dist ():
@@ -63,9 +61,7 @@ def upload_migrations ():
     with lcd(BUILD_DIR):
         local('tar czf /tmp/flowah_migrations.tar.gz -C flowah/data migrations')
     put('/tmp/flowah_migrations.tar.gz', '/tmp/')
-    sudo('rm -rf /opt/flowah/flowah')
-    sudo('mkdir -p /opt/flowah/flowah/data', user = 'flowah')
-    sudo('tar xzf /tmp/flowah_migrations.tar.gz -C /opt/flowah/flowah/data', user = 'flowah')
+    sudo('tar xzf /tmp/flowah_migrations.tar.gz -C /opt/flowah/', user = 'flowah')
     sudo('rm /tmp/flowah_migrations.tar.gz')
 
 def clean ():
@@ -99,27 +95,3 @@ def stop ():
 def restart ():
     stop()
     start()
-
-# def deploy (source = 'raw'):
-#     clean()
-#     build(source)
-
-#     # upload package
-#    
-
-#     stop()
-
-#     #git+https://github.com/fillest/sapyens.git
-#     # install package
-#     with prefix('source /opt/flowah/venv/bin/activate'):
-#         # delete old package and force update
-#         sudo('(pip freeze | grep flowah) && pip uninstall --yes flowah || :', user = 'flowah')
-#         sudo('pip install ' + sdist_remote_path, user = 'flowah')
-#     run('rm ' + sdist_remote_path)
-
-#     upload_config()
-#     upload_static()
-
-#     start()
-
-#     clean()
