@@ -10,14 +10,6 @@ from os.path import basename, exists
 BUILD_DIR = '/tmp/flowah_build'
 
 
-# def create_schema ():
-#     if confirm("really run schema sql? this normally should be done initially and only once", default = False):
-#         remote_file = '/tmp/flowah_schema.sql'
-#         put('schema.sql', remote_file)
-#         puts("[!] enter in-pg user password, not system user's")
-#         run('psql --dbname flowah --file %s --host localhost --port 5432 --username postgres' % remote_file)
-#         run('rm ' + remote_file)
-
 def build ():
     local('cp -r . ' + BUILD_DIR)
     local('rm -r {build_dir}/flowah.egg-info'.format(build_dir = BUILD_DIR))
@@ -26,7 +18,6 @@ def build ():
         # local('tar czf /tmp/flowah_static.tar.gz -C flowah static')
         local('rm -r flowah/static')
 
-        # local('python setup.py sdist --formats=gztar --dist-dir sdist')
         local('python setup.py sdist')
 
 def deploy ():
