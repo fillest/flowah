@@ -16,7 +16,7 @@ def build ():
 
     with lcd(BUILD_DIR):
         # local('tar czf /tmp/flowah_static.tar.gz -C flowah static')
-        local('rm -r flowah/static')
+        # local('rm -r flowah/static')
 
         local('python setup.py sdist')
 
