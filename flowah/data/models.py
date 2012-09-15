@@ -27,3 +27,6 @@ class Entry (Reflected, QueryPropertyMixin, ScopedSessionMixin):
 		content = RE_URL.sub(literal(r'<a href="\1">\2</a>'), content)
 
 		return literal(content)
+
+	def tags_to_string (self):
+		return self.tags.replace(u'#', u'')

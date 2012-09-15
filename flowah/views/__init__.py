@@ -4,6 +4,10 @@ from pyramid.view import view_config
 from flowah.data.models import Entry
 from sapyens.helpers import raise_not_found, get_by_id, add_route
 from ordereddict import OrderedDict  #py2.6
+import re
+
+
+RE_TAG = re.compile(r'(\w+)', re.UNICODE)
 
 
 priorities = {
@@ -49,10 +53,12 @@ def list_ (request):
 @add_route('entry.save', '/save')
 @view_config(route_name = 'entry.save', renderer = 'string', permission = 'admin')
 def save (request):
+	tags = u' '.join(u'#%s#' % tag for tag in sorted(set(RE_TAG.findall(request.POST['tags']))))
+
 	if request.POST['entry_id'] == 'new':
 		entry = Entry(
 			content = request.POST['content'],
-			tags = '',
+			tags = tags,
 			priority = request.POST['priority'],
 			parent_id = request.POST['parent_id'] or None,
 		).add()
@@ -60,9 +66,11 @@ def save (request):
 		assert request.POST['entry_id'] != request.POST['parent_id']
 		entry = Entry.try_get(id = request.POST['entry_id']).set(
 			content = request.POST['content'],
+			tags = tags,
 			priority = request.POST['priority'],
 			parent_id = request.POST['parent_id'] or None,
 		).add()
+		
 	return 'ok'
 
 @add_route('entry.delete', '/delete')

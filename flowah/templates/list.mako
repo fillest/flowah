@@ -33,8 +33,9 @@
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> reload_page()).error -> alert 'fail'
 			
-		render_entry_form = (entry_id, content, priority, parent_id = '') ->
+		render_entry_form = (entry_id, content, priority, tags, parent_id = '') ->
 			'
+			<i class="icon-edit"></i>
 			<textarea rows="1" style="width: 300px;">' + content + '</textarea>
 
 			<input class="js-entry-form-parent-id" type="hidden" value="' + parent_id + '"></input>
@@ -48,9 +49,15 @@
 			</select>
 
 			<br />
+			<i class="icon-tags"></i>
+			<input class="js-entry-form-tags" type="text" value="' + tags + '"></input>
+
+			<br />
 			<button class="js-save-entry btn-mini"
 				data-entry-id="' + entry_id + '"
-				data-entry-priority="' + priority + '">save</button>
+				data-entry-priority="' + priority + '"
+				data-tags="' + tags + '"
+				>save</button>
 			'
 
 		$('.js-edit-entry').click ->
@@ -63,7 +70,7 @@
 			content = parent.find('.js-content-source').html()
 			parent_id = parent.closest('.js-entries').closest('li').data('entry-id') or ''
 			$('
-				<span>' + render_entry_form(el.data('entry-id'), content, el.data('entry-priority'), parent_id) + '</span>
+				<span>' + render_entry_form(el.data('entry-id'), content, el.data('entry-priority'), el.data('tags'), parent_id) + '</span>
 			').appendTo(parent).focus()
 
 		$('body').on 'click', '.js-save-entry', ->
@@ -77,23 +84,24 @@
 				content: parent.find('textarea').val(),
 				priority: parent.find('.js-entry-priority').val(),
 				parent_id: parent.find('.js-entry-form-parent-id').val(),
+				tags: parent.find('.js-entry-form-tags').val(),
 			}, -> reload_page()).error -> alert 'fail'
 
 		$('.js-create-entry-bottom').click ->
 			$('
-				<li>' + render_entry_form('new', "", 0) + '</li>
+				<li>' + render_entry_form('new', "", 0, "") + '</li>
 			').appendTo($ 'body .js-entries:first').find('textarea').focus()
 
 		$('.js-create-entry-top').click ->
 			$('
-				<li>' + render_entry_form('new', "", 0) + '</li>
+				<li>' + render_entry_form('new', "", 0, "") + '</li>
 			').prependTo($ 'body .js-entries:first').find('textarea').focus()
 
 		$('.js-add-child').click ->
 			parent = $(this).closest('li')
 			id = parent.data('entry-id')
 			$('
-				<li>' + render_entry_form('new', "", 0, id) + '</li>
+				<li>' + render_entry_form('new', "", 0, "", id) + '</li>
 			').insertAfter(parent.find('.js-entry-boundary:first')).find('textarea').focus()
 
 		$('.js-expand-content').click ->
@@ -152,6 +160,8 @@
 	.js-entries > li:hover > .buttons {visibility: visible;}
 	.content-rendered {text-overflow: '(…)'; width: 800px; white-space: nowrap; overflow: hidden;}
 	#spinner {position: fixed; top: 0; left: 0; z-index: 9000;}
+	.rendered-tags {opacity: 0.2; margin-left: 0.7em;}
+	.rendered-tags:hover {opacity: 1;}
 </style>
 
 <img id="spinner" class="hide" src="http://cdn.fillest.ru/spinner.gif" alt="loading..." title="loading..." />
@@ -176,7 +186,9 @@
 			<a href="#" class="js-confirm js-delete-entry js"><i class="icon-remove"></i></a>
 			<a href="#" class="js-edit-entry js"
 				data-entry-id="${entry.id}"
-				data-entry-priority="${entry.priority}"><i class="icon-pencil"></i></a>
+				data-entry-priority="${entry.priority}"
+				data-tags="${entry.tags_to_string()}"
+				><i class="icon-pencil"></i></a>
 			<a href="#" class="js-add-child js"><i class="icon-plus"></i></a>
 			<a href="#" class="js-fold-entry js" ${'style="visibility: visible"' if entry.is_folded else '' |n}>
 				<i class="icon-folder-${'open' if entry.is_folded else 'close'}"
@@ -193,6 +205,12 @@
 				<span class="js-expand-content"
 					style="cursor: crosshair; ${'text-decoration: line-through;' if entry.is_crossed else ''}">${entry.render()}</span>
 				<span class="js-content-rendered-full" style="display: none; cursor: n-resize">${entry.render(full = True)}</span>
+
+				% if entry.tags_to_string():
+					<span class="rendered-tags">
+						<i class="icon-tags"></i> ${entry.tags_to_string()}
+					</span>
+				% endif
 			</div>
 		</div>
 		<div class="js-entry-boundary" style="clear: both;"></div>
