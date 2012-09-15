@@ -38,7 +38,7 @@
 			<i class="icon-edit"></i>
 			<textarea rows="1" style="width: 300px;">' + content + '</textarea>
 
-			<input class="js-entry-form-parent-id" type="hidden" value="' + parent_id + '"></input>
+			<input class="js-entry-form-parent-id" type="hidden" value="' + parent_id + '" />
 
 			<br />
 			<i class="icon-exclamation-sign"></i>
@@ -50,7 +50,7 @@
 
 			<br />
 			<i class="icon-tags"></i>
-			<input class="js-entry-form-tags" type="text" value="' + tags + '"></input>
+			<input class="js-entry-form-tags" type="text" value="' + tags + '" />
 
 			<br />
 			<button class="js-save-entry btn-mini"
@@ -167,6 +167,8 @@
 <img id="spinner" class="hide" src="http://cdn.fillest.ru/spinner.gif" alt="loading..." title="loading..." />
 
 <form action="${request.route_path('root')}" method="get">
+	<i class="icon-tags"></i> <input name="tags" type="text" value="${request.GET.get('tags', '')}" />
+
 	% for value, params in sorted(priorities.items(), reverse = True):
 		<label class="checkbox inline">
 			<input name="pr" type="checkbox" value="${value}" autocomplete="off"

@@ -8,6 +8,7 @@ import re
 
 
 RE_TAG = re.compile(r'(\w+)', re.UNICODE)
+RE_TAG_Q = re.compile(r'(\w+)|([()])', re.UNICODE)
 
 
 priorities = {
@@ -24,8 +25,19 @@ priorities = {
 def list_ (request):
 	priority = map(int, request.GET.getall('pr'))
 
+	tags = request.GET.get('tags', '')
+	def repl (matchobj):
+		m = matchobj.group(0)
+		if m in ('or', 'and', 'not', '(', ')'):
+			return m.upper()
+		else:
+			return u"tags LIKE '%%#%s#%%'" % m
+	tags = re.sub(RE_TAG_Q, repl, tags)
+
 	entries = OrderedDict()
 	q = Entry.query.order_by(Entry.priority.desc(), Entry.created_time.desc())
+	if tags:
+		q = q.filter(tags)
 	if priority:
 		q = q.filter(Entry.priority.in_(priority))
 	for e in q:
@@ -70,7 +82,7 @@ def save (request):
 			priority = request.POST['priority'],
 			parent_id = request.POST['parent_id'] or None,
 		).add()
-		
+
 	return 'ok'
 
 @add_route('entry.delete', '/delete')
