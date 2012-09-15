@@ -15,6 +15,7 @@
 		<script src="http://cdn.fillest.ru/bootstrap.2.1.1/js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
 		<script src="http://cdn.fillest.ru/coffee-script.1.3.3.min.js" type="text/javascript" charset="UTF-8"></script>
 		<script src="http://cdn.fillest.ru/jquery-ui-1.8.23.full.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="http://cdn.fillest.ru/jquery.cookie.e39cf51.js" type="text/javascript" charset="UTF-8"></script>
 	</head>
 	<body>
 		<div style="text-align: right;">

@@ -3,9 +3,14 @@
 
 <script type="text/coffeescript">
 	$ ->
+		if $.cookie 'set_scroll_pos'
+			$(window).scrollTop($.cookie 'set_scroll_pos')
+			$.removeCookie 'set_scroll_pos'
+
 		reload_page = ->
 			# avoid reload() that causes excess static ifmodified requests
-			window.location.href = '${request.route_path('root')}'
+			$.cookie 'set_scroll_pos', $(window).scrollTop()
+			window.location.href = '${request.url}'
 
 		$('body').on 'click', '.js', (event) ->
 			event.preventDefault()
