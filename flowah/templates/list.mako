@@ -3,6 +3,10 @@
 
 <script type="text/coffeescript">
 	$ ->
+		reload_page = ->
+			# avoid reload() that causes excess static ifmodified requests
+			window.location.href = '${request.route_path('root')}'
+
 		$('body').on 'click', '.js', (event) ->
 			event.preventDefault()
 
@@ -15,19 +19,19 @@
 			$('#spinner').show()
 			$.post("${request.route_path('entry.delete')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
-			}, -> window.location.reload()).error -> alert 'fail'
+			}, -> reload_page()).error -> alert 'fail'
 
 		$('.js-cross-entry').click ->
 			$('#spinner').show()
 			$.post("${request.route_path('entry.cross')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
-			}, -> window.location.reload()).error -> alert 'fail'
+			}, -> reload_page()).error -> alert 'fail'
 
 		$('.js-fold-entry').click ->
 			$('#spinner').show()
 			$.post("${request.route_path('entry.fold')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
-			}, -> window.location.reload()).error -> alert 'fail'
+			}, -> reload_page()).error -> alert 'fail'
 			
 		render_entry_form = (entry_id, content, priority, parent_id = '') ->
 			'
@@ -73,7 +77,7 @@
 				content: parent.find('textarea').val(),
 				priority: parent.find('.js-entry-priority').val(),
 				parent_id: parent.find('.js-entry-form-parent-id').val(),
-			}, -> window.location.reload()).error -> alert 'fail'
+			}, -> reload_page()).error -> alert 'fail'
 
 		$('.js-create-entry-bottom').click ->
 			$('
@@ -116,8 +120,9 @@
 		    tolerance: 'pointer',
 		    drop: (e, ui) ->
 		    	$('#spinner').show()
-		    	$.get('${request.route_path('entry.move')}?id=' + ui.draggable.data('entry-id') + '&parent_id=' + $(this).data('entry-id'), ->
-		    		window.location.reload()
+		    	$.get('${request.route_path('entry.move')}?id=' +
+		    			ui.draggable.data('entry-id') + '&parent_id=' + $(this).data('entry-id'), ->
+		    		reload_page()
 		    	).error -> alert 'fail'
 		    	$(this).css "border", ''
 		    over: ->
@@ -132,7 +137,7 @@
 		    drop: (e, ui) ->
 		    	$('#spinner').show()
 		    	$.get('${request.route_path('entry.move')}?id=' + ui.draggable.data('entry-id') + '&parent_id=', ->
-		    		window.location.reload()
+		    		reload_page()
 		    	).error -> alert 'fail'
 		    	$(this).css "background-color", ''
 		    over: ->
