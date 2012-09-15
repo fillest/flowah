@@ -178,7 +178,10 @@
 				data-entry-id="${entry.id}"
 				data-entry-priority="${entry.priority}"><i class="icon-pencil"></i></a>
 			<a href="#" class="js-add-child js"><i class="icon-plus"></i></a>
-			<a href="#" class="js-fold-entry js" ${'style="visibility: visible"' if entry.is_folded else '' |n}><i class="icon-folder-open"></i></a>
+			<a href="#" class="js-fold-entry js" ${'style="visibility: visible"' if entry.is_folded else '' |n}>
+				<i class="icon-folder-${'open' if entry.is_folded else 'close'}"
+					${'style="visibility: hidden"' if not entry.children else '' |n}></i>
+			</a>
 		</div>
 		<div style="float: left; margin-left: 0.3em;">
 			<span class="js-content-source" style="display: none;">${entry.content}</span>
