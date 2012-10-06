@@ -12,6 +12,11 @@
 			$.cookie 'set_scroll_pos', $(window).scrollTop()
 			window.location.href = '${request.url}'
 
+		show_spinners = ->
+			$('body').css 'cursor', 'wait'
+			$('#spinner').show()
+
+
 		$('body').on 'click', '.js', (event) ->
 			event.preventDefault()
 
@@ -21,7 +26,7 @@
 				return false
 
 		$('.js-delete-entry').click ->  #note: must be executed later than $('.js-confirm').click ..
-			$('#spinner').show()
+			show_spinners()
 			$.post("${request.route_path('entry.delete')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> reload_page()).error -> alert 'fail'
@@ -33,7 +38,7 @@
 			}, -> reload_page()).error -> alert 'fail'
 
 		$('.js-fold-entry').click ->
-			$('#spinner').show()
+			show_spinners()
 			$.post("${request.route_path('entry.fold')}", {
 				entry_id: $(this).closest('li').data('entry-id'),
 			}, -> reload_page()).error -> alert 'fail'
@@ -79,7 +84,7 @@
 			').appendTo(parent).focus()
 
 		$('body').on 'click', '.js-save-entry', ->
-			$('#spinner').show()
+			show_spinners()
 
 			el = $(this)
 			parent = el.parent()
@@ -132,7 +137,7 @@
 		    addClasses: false,
 		    tolerance: 'pointer',
 		    drop: (e, ui) ->
-		    	$('#spinner').show()
+		    	show_spinners()
 		    	$.get('${request.route_path('entry.move')}?id=' +
 		    			ui.draggable.data('entry-id') + '&parent_id=' + $(this).data('entry-id'), ->
 		    		reload_page()
@@ -148,7 +153,7 @@
 		    addClasses: false,
 		    tolerance: 'pointer',
 		    drop: (e, ui) ->
-		    	$('#spinner').show()
+		    	show_spinners()
 		    	$.get('${request.route_path('entry.move')}?id=' + ui.draggable.data('entry-id') + '&parent_id=', ->
 		    		reload_page()
 		    	).error -> alert 'fail'
