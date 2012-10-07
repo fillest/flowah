@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 
 		<title>
-			Flowah
+			Flowah: <%block name="title">untitled</%block>
 		</title>
 
 		<link rel="stylesheet" href="http://cdn.fillest.ru/bootstrap.2.1.1/css/bootstrap.min.css" charset="UTF-8" />

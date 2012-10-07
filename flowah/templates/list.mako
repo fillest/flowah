@@ -1,6 +1,9 @@
 <%inherit file="/base.mako" />
 
 
+<%block name="title">${request.GET.get('tags') or 'all'}</%block>
+
+
 <script type="text/coffeescript">
 	$ ->
 		if $.cookie 'set_scroll_pos'
