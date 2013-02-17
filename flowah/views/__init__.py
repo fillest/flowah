@@ -67,9 +67,10 @@ def list_ (request):
 def save (request):
 	tags = u' '.join(u'#%s#' % tag for tag in sorted(set(RE_TAG.findall(request.POST['tags']))))
 
+	content = request.POST['content'].strip()
 	if request.POST['entry_id'] == 'new':
 		entry = Entry(
-			content = request.POST['content'],
+			content = content,
 			tags = tags,
 			priority = request.POST['priority'],
 			parent_id = request.POST['parent_id'] or None,
@@ -77,7 +78,7 @@ def save (request):
 	else:
 		assert request.POST['entry_id'] != request.POST['parent_id']
 		entry = Entry.try_get(id = request.POST['entry_id']).set(
-			content = request.POST['content'],
+			content = content,
 			tags = tags,
 			priority = request.POST['priority'],
 			parent_id = request.POST['parent_id'] or None,
