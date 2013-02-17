@@ -4,12 +4,20 @@
 <%block name="title">${request.GET.get('tags') or 'all'}</%block>
 
 
+<script type="text/javascript">
+	var t = setInterval(function () {
+		if ($.cookie('set_scroll_pos')) {
+			$(window).scrollTop($.cookie('set_scroll_pos'));
+		}
+	}, 10);
+	$(function () {
+		clearInterval(t);
+		$.removeCookie('set_scroll_pos');
+	});
+</script>
+
 <script type="text/coffeescript">
 	$ ->
-		if $.cookie 'set_scroll_pos'
-			$(window).scrollTop($.cookie 'set_scroll_pos')
-			$.removeCookie 'set_scroll_pos'
-
 		reload_page = ->
 			# avoid reload() that causes excess static ifmodified requests
 			$.cookie 'set_scroll_pos', $(window).scrollTop()
