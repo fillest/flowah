@@ -57,6 +57,9 @@ def list_ (request):
 	for id in keys_to_del:
 		del entries[id]
 
+	if tags:
+		entries = OrderedDict(sorted(entries.items(), key = (lambda (k, e): e.priority), reverse = True))
+
 	return {
 		'entries': entries.values(),
 		'priorities': priorities,
