@@ -5,6 +5,7 @@ from webhelpers.text import chop_at
 from webhelpers.html import literal
 from mako.filters import html_escape
 import re
+import urllib
 
 
 RE_URL = re.compile(r'(https?://([^\s]+))')
@@ -24,7 +25,10 @@ class Entry (Reflected, QueryPropertyMixin, ScopedSessionMixin):
 			content = html_escape(self.content)
 			content = self.content.replace('\n', '<br/>')
 
-		content = RE_URL.sub(literal(r'<a href="\1">\2</a>'), content)
+		def sub_url (m):
+			cut_decoded_url = urllib.unquote(m.group(2).encode('utf8')).decode('utf8')
+			return literal(r'<a href="%s">%s</a>' % (m.group(1), cut_decoded_url))
+		content = RE_URL.sub(sub_url, content)
 
 		return literal(content)
 
