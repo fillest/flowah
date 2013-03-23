@@ -57,7 +57,7 @@
 		render_entry_form = (entry_id, content, priority, tags, parent_id = '') ->
 			'
 			<i class="icon-edit"></i>
-			<textarea rows="1" style="width: 300px;">' + content + '</textarea>
+			<textarea class="js-entry-form-content" rows="1" style="width: 300px;">' + content + '</textarea>
 
 			<input class="js-entry-form-parent-id" type="hidden" value="' + parent_id + '" />
 
@@ -93,6 +93,9 @@
 			$('
 				<span>' + render_entry_form(el.data('entry-id'), content, el.data('entry-priority'), el.data('tags'), parent_id) + '</span>
 			').appendTo(parent).focus()
+
+			$('.js-entry-form-tags').bind 'keydown', 'ctrl+return', -> $('.js-save-entry').click()
+			$('.js-entry-form-content').bind 'keydown', 'ctrl+return', -> $('.js-save-entry').click()
 
 		$('body').on 'click', '.js-save-entry', ->
 			show_spinners()
