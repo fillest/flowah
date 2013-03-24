@@ -9,7 +9,7 @@ requires = [
   'PasteDeploy==1.5.0',
   'PyYAML==3.10',
   'Pygments==1.5',
-  'SQLAlchemy==0.7.8',
+  'SQLAlchemy==0.8.0',
   'WebHelpers==1.3',
   'WebOb==1.2.2',
   'argh==0.15.1',
