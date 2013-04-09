@@ -7,6 +7,9 @@
 			Flowah: <%block name="title">untitled</%block>
 		</title>
 
+		## current: from faviconist.com with 'nova oval' font
+		<link rel="shortcut icon" type="image/x-icon" href="${request.static_url('flowah:static/favicon.ico')}">
+
 		<link rel="stylesheet" href="http://cdn.fillest.ru/bootstrap.2.1.1/css/bootstrap.min.css" charset="UTF-8" />
 
 		<%block name="links"></%block>
